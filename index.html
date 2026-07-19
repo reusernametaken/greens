@@ -29,7 +29,9 @@
   sitting as a low-opacity ghost layer behind live HTML text
   that reads "Just Greens" in a simple, unimposing serif (Lora) --
   applied to the rest of this section's text too (prompt/desc/
-  footer), one step larger than their previous sizes.
+  footer), one step larger than their previous sizes. Ghost
+  opacity now breathes between 36% and 66% on a slow 7s loop
+  (respects prefers-reduced-motion -> falls back to a static 51%).
   Asset: assets/greens-icons-ghost.png -- generated from the
   original poster (crops the icon band, keys the cream backing
   to transparent). Needs to sit in an assets/ folder alongside
@@ -77,12 +79,16 @@
   body {
     display: flex;
     justify-content: center;
-    padding: 32px 16px 64px;
+    padding: 0 16px;
+    min-height: 100vh;
   }
 
   .page-shell {
     width: 100%;
     max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   body::before {
@@ -108,7 +114,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 24px;
+    padding: 0 60px;
     overflow: hidden;
   }
 
@@ -121,6 +127,16 @@
     opacity: 0.66;
     z-index: 0;
     pointer-events: none;
+    animation: ghost-breathe 7s ease-in-out infinite;
+  }
+
+  @keyframes ghost-breathe {
+    0%, 100% { opacity: 0.36; }
+    50%      { opacity: 0.66; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flag-ghost { animation: none; opacity: 0.51; }
   }
 
   .flag h1 {
@@ -143,12 +159,12 @@
     z-index: 2;
     background: none;
     border: none;
-    padding: 8px;
+    padding: 4px;
     color: var(--dim);
     font-family: var(--mono);
     font-weight: 700;
-    font-size: clamp(18px, 4.5vw, 28px);
-    letter-spacing: 0.05em;
+    font-size: clamp(13px, 2.5vw, 17px);
+    letter-spacing: 0.03em;
     cursor: pointer;
     line-height: 1;
     text-decoration: none;
@@ -182,7 +198,7 @@
   }
 
   footer {
-    margin-top: 48px;
+    margin-top: auto;
     padding: 16px 20px 20px;
     border-top: 1px solid var(--paper-rule);
     font-size: 14px;
@@ -198,6 +214,7 @@
     align-items: stretch;
     justify-content: center;
     gap: 14px;
+    flex: 1 1 auto;
   }
 
   .peek {
@@ -252,6 +269,8 @@
     background: #ffffff;
     border: 1px solid var(--paper-rule);
     font-family: var(--serif);
+    display: flex;
+    flex-direction: column;
   }
 
   .page-strip {
@@ -324,6 +343,8 @@
         <hr>
 
         <p class="desc">nonprofit produce, window grow array -- full page in progress</p>
+
+        <p class="desc">composting cardboard, lawn clippings, and surplus food-bank produce into soil -- turning refuse into the energy that grows and distributes healthy greens</p>
 
         <footer>
           <span>JUST GREENS // greens.2203.fyi</span>
