@@ -210,13 +210,13 @@
     min-width: 0;
     max-width: 220px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     position: relative;
   }
 
   .peek-arrow {
     position: absolute;
-    top: 50%;
+    top: 100px;
     transform: translateY(-50%);
     z-index: 3;
     background: none;
@@ -239,86 +239,60 @@
   .peek--left .peek-arrow { right: 8px; }
   .peek--right .peek-arrow { left: 8px; }
 
-  .peek-card {
+  /* ---------- frame: a duplicated partial view of the neighboring
+     page's header graphic, true scale (200px, matching this page's
+     own flag height), plus a flat color-coded block standing in for
+     its body. No text -- just the graphic, the color, and the arrow. ---------- */
+  .frame {
     width: 100%;
-    min-height: 150px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    border: 1px solid var(--rule);
-    border-top: 3px solid var(--peek-accent, var(--blue));
-    background: var(--panel);
-    padding: 14px 12px;
     text-decoration: none;
-    color: inherit;
     opacity: 0.6;
     cursor: pointer;
     transition: opacity 0.15s ease;
     overflow: hidden;
+    border: 1px solid var(--rule);
   }
-  .peek-card:hover,
-  .peek-card:focus-visible {
+  .frame:hover,
+  .frame:focus-visible {
     opacity: 1;
   }
-  .peek-eyebrow {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--dim);
-  }
-  .peek-card h3 {
-    margin: 4px 0 6px;
-    font-size: 14px;
-    color: var(--white);
-  }
-  .peek-card p {
-    margin: 0;
-    font-size: 12px;
-    color: var(--dim);
-  }
+  .frame-header { height: 200px; flex-shrink: 0; }
+  .frame-body { flex: 1 1 auto; }
 
-  /* ---------- echo cards: a genuine partial preview of the destination page ---------- */
-  .peek-card--echo { padding: 0; justify-content: flex-start; }
-  .peek-echo-img { height: 64px; flex-shrink: 0; }
-  .peek-echo-body { flex: 1 1 auto; padding: 14px 12px; display: flex; flex-direction: column; justify-content: flex-end; }
-
-  /* destination: mesh that divide -- this is a RIGHT-side peek, so we show
-     the LEADING edge of its header, zoomed in hard */
-  .peek-echo-img--mtd {
+  /* destination: mesh that divide -- RIGHT-side frame, so we show the
+     edge of its header closest to this page (its left/leading edge)
+     -- true scale matching mtd.2203.fyi's own flag */
+  .frame-header--mtd {
     background-image: url('assets/mtd-header.jpg');
-    background-size: 1600px auto;
-    background-position: -193px center;
+    background-size: auto 200px;
+    background-position: left center;
     background-repeat: no-repeat;
   }
-  .peek-echo-body--mtd { background: #ede4c5; }
-  .peek-echo-body--mtd .peek-eyebrow { color: #8a7f5f; }
-  .peek-echo-body--mtd h3 { color: #2a2416; }
-  .peek-echo-body--mtd p { color: #6b6350; }
+  .frame-body--mtd { background: #ede4c5; }
 
-  /* destination: knet -- this is a LEFT-side peek, so we show the
-     TRAILING edge (ET + cursor), recreated in CSS, zoomed in hard */
-  .peek-echo-img--knet {
+  /* destination: knet -- LEFT-side frame, so we show the edge of its
+     header closest to this page (its right/trailing edge) -- true
+     scale matching 86.2203.fyi's own flag (44px wordmark) */
+  .frame-header--knet {
     background: linear-gradient(135deg, #000 49.6%, #1c3fd9 50.4%);
     display: flex;
     align-items: center;
     justify-content: flex-end;
     overflow: hidden;
-    padding-right: 6px;
+    padding-right: 16px;
   }
-  .peek-echo-img--knet span {
+  .frame-header--knet span {
     color: #fff;
     font-family: var(--mono);
     font-weight: 700;
-    font-size: 130px;
-    line-height: 1;
+    font-size: 44px;
+    letter-spacing: 0.12em;
     white-space: nowrap;
-    letter-spacing: 0.02em;
-    text-shadow: 0 0 8px rgba(255,255,255,0.3);
   }
-  .peek-echo-body--knet { background: #1c3fd9; }
-  .peek-echo-body--knet .peek-eyebrow { color: rgba(255,255,255,0.65); }
-  .peek-echo-body--knet h3 { color: #ffffff; }
-  .peek-echo-body--knet p { color: rgba(255,255,255,0.8); }
+  .frame-body--knet { background: #000000; }
 
   main.center-frame {
     flex: 1 1 auto;
@@ -381,13 +355,9 @@
   <div class="frameset-track">
       <aside class="peek peek--left">
         <a class="peek-arrow" href="https://86.2203.fyi/" aria-label="Previous: kNET" title="kNET📡">[ &rsaquo; ]</a>
-        <a class="peek-card peek-card--echo" href="https://86.2203.fyi/" style="--peek-accent:#1c3fd9">
-          <div class="peek-echo-img peek-echo-img--knet"><span>kNET</span></div>
-          <div class="peek-echo-body peek-echo-body--knet">
-            <span class="peek-eyebrow">PREV</span>
-            <h3>KNET</h3>
-            <p>landing / tools / projects</p>
-          </div>
+        <a class="frame" href="https://86.2203.fyi/" aria-label="Previous: kNET">
+          <div class="frame-header frame-header--knet"><span>kNET</span></div>
+          <div class="frame-body frame-body--knet"></div>
         </a>
       </aside>
 
@@ -414,13 +384,9 @@
       </main>
 
       <aside class="peek peek--right">
-        <a class="peek-card peek-card--echo" href="https://mtd.2203.fyi/" style="--peek-accent:#c9812f">
-          <div class="peek-echo-img peek-echo-img--mtd"></div>
-          <div class="peek-echo-body peek-echo-body--mtd">
-            <span class="peek-eyebrow">NEXT</span>
-            <h3>MESH THAT DIVIDE</h3>
-            <p>community Meshtastic network</p>
-          </div>
+        <a class="frame" href="https://mtd.2203.fyi/" aria-label="Next: Mesh That Divide">
+          <div class="frame-header frame-header--mtd"></div>
+          <div class="frame-body frame-body--mtd"></div>
         </a>
         <a class="peek-arrow" href="https://mtd.2203.fyi/" aria-label="Next: Mesh That Divide" title="#^÷meshTHATdivide🏔️">[ &lsaquo; ]</a>
       </aside>
