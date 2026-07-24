@@ -207,12 +207,12 @@
     /* Reset the desktop's absolute vertical centering; on mobile the
        promo card is a plain in-grid tile filling its cell. */
     .promo {
-      position: static !important;
+      position: relative !important;
       transform: none !important;
       top: auto !important;
       left: auto !important;
       right: auto !important;
-      width: auto;
+      width: min(214px, 100%);
     }
     /* Hover lift also needs adjusting -- desktop's version was
        translateY(calc(-50% - 2px)) since it started at -50%.
@@ -383,7 +383,9 @@
   .mtd-photo {
     display: block;
     width: 100%;
-    height: auto;
+    height: 74px;
+    object-fit: cover;
+    object-position: center top;
   }
 
   /* ---------- scrubber: plain centered row below the carousel,
