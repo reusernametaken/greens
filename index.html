@@ -170,24 +170,57 @@
     flex-direction: column;
   }
 
+  /* ---------- mobile layout (rev 3, per shared 2203.fyi convention):
+     when the sidebars can no longer flank the flag, the whole page
+     becomes a two-row grid --
+       row 1: main content, full width (spans both columns);
+       row 2: peek cards (this page's prev/next site promos), each
+              filling half the width, side by side.
+     Greens carries no side-nav menus in its margins, so the aside
+     boxes contribute only their peek promo cards -- no top navbar
+     row is needed on this file. k-NET and MTD implement the same
+     bottom-strip pattern from their own files. `display: contents`
+     on the asides promotes their .promo children straight into the
+     grid so the grid can place them by name. ---------- */
   @media (max-width: 1108px) {
-    .carousel-row { flex-direction: column; align-items: center; }
-    .margin-left, .margin-right {
-      position: static;
+    .carousel-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "main  main"
+        "peekL peekR";
+      column-gap: 12px;
+      row-gap: 16px;
       width: 100%;
       max-width: 640px;
-      display: flex;
-      justify-content: center;
+      align-items: stretch;
     }
-    .margin-left .promo, .margin-right .promo {
+    .margin-left, .margin-right { display: contents; }
+    main.center-frame {
+      grid-area: main;
+      flex: initial;
+      width: 100%;
+      max-width: none;
+    }
+    .margin-left .promo  { grid-area: peekL; }
+    .margin-right .promo { grid-area: peekR; }
+    /* Reset the desktop's absolute vertical centering; on mobile the
+       promo card is a plain in-grid tile filling its cell. */
+    .promo {
       position: static !important;
       transform: none !important;
-      left: auto; right: auto; top: auto;
-      width: 214px;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      width: auto;
     }
-    .margin-left { order: 2; margin-top: 16px; }
-    main.center-frame { order: 1; width: 100%; max-width: 640px; }
-    .margin-right { order: 3; margin-top: 16px; }
+    /* Hover lift also needs adjusting -- desktop's version was
+       translateY(calc(-50% - 2px)) since it started at -50%.
+       In-grid it starts at 0, so a simple -2px is the right lift. */
+    .promo:hover,
+    .promo:focus-visible {
+      transform: translateY(-2px) !important;
+    }
   }
 
   /* ---------- flag: unchanged from rev 1 except the arrows, which
